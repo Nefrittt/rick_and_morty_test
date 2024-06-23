@@ -1,0 +1,92 @@
+  
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+
+    font-size: large;
+}
+
+#card-colection {
+    width: 100%;
+
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+}
+
+.card {
+    margin: 15px;
+}
+
+/* Search */
+
+#search {
+    display: flex;
+    justify-content: center;
+}
+ 
+#search button {
+    margin-left: 15px;
+    padding: 5px;
+}
+
+#search input {
+    width: 250px;
+    border: 2px rgba(179, 196, 118, 0.568) solid;
+    border-radius: 10px;
+}
+
+
+/* Pagination Board */
+
+#pagination {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+#pagination #pageNum {
+    margin: 10px;
+    font-size: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: black;
+}
+
+#pagination button {
+    width: 180px;
+    height: 60px;
+    font-size: 22px;
+    font-weight: 100;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid #91C9FF;
+    outline: none;
+    transition: 0.2s ease-in-out;
+}
+#pagination button:hover {
+    transition: 0.2s ease-in-out;
+    background: #4F95DA;
+    color: white;
+}
+
+
+
+
+/* #pagination #next {
+    justify-content: end;
+} */
+
+
+
+
