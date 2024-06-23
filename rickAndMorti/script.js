@@ -11,6 +11,7 @@ const pageNum = document.querySelector('#pageNum');
 const cardColection = document.getElementById('card-colection')
 var currentURL = 'https://rickandmortyapi.com/api/character';
 
+
 // functional for page borders
 let page = 1;
 if(page > 0 && page <= 42) {
@@ -40,18 +41,41 @@ function getData(url) {
         }
 }
 
+function next() {
+    if(page < 42) {
+        cardColection.innerHTML = ''
+        page++;
+        currentURL = charactersURL + `?page=${page}&name=${searchSpace.value}`
+        getData(currentURL);
+        pageNum.textContent = page + ' стр';
+    }
+}
+function prev() {
+    if(page > 1) {
+        cardColection.innerHTML = '';
+        page--;
+        currentURL = charactersURL + `?page=${page}&name=${searchSpace.value}`
+        getData(currentURL);
+        pageNum.textContent = page + ' стр';
+    }
+}
+
+
 function searching() {
-    fetch(currentURL)
+    fetch(`https://rickandmortyapi.com/api/character/?name=${searchSpace.value}`)
         .then(response => response.json())
         .then(data => filterChar(data.results))
 
         cardColection.innerHTML = '';
-        console.log(currentURL);
+        pageNum.textContent = 1 + ' стр';
+        page = 1;
+
+        nextPage.addEventListener('click', next);
+        
+        prevPage.addEventListener('click', prev);
 
         // search function realise:
         function filterChar(chars) {
-            
-
             for(let char of chars) {
                 let charName = char.name.toLowerCase();
                 if(charName.includes(searchSpace.value.toLowerCase())) {
@@ -79,26 +103,16 @@ searchBtn.addEventListener( 'click' , searching)
 
 // Pagination:
 
+if(searchSpace.value === '') {
+    nextPage.addEventListener('click', next);
+    prevPage.addEventListener('click', prev);
+    
+} else {
+    nextPage.removeEventListener('click', next);
+    prevPage.removeEventListener('click', prev);
+}
 
-nextPage.addEventListener('click', function() {
-    if(page < 42) {
-        cardColection.innerHTML = ''
-        page++;
-        currentURL = charactersURL + `?page=${page}`
-        getData(currentURL);
-        pageNum.textContent = page + ' стр';
-    }
-}) 
 
-prevPage.addEventListener('click', function() {
-    if(page > 1) {
-        cardColection.innerHTML = '';
-        page--;
-        currentURL = charactersURL + `?page=${page}`
-        getData(currentURL);
-        pageNum.textContent = page + ' стр';
-    }
-})
 
 
 
