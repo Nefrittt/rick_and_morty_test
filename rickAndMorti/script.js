@@ -8,25 +8,27 @@ const searchBtn = document.getElementById('btnSearch');
 const prevPage = document.getElementById('previosly');
 const nextPage = document.getElementById('next');
 const pageNum = document.querySelector('#pageNum');
-const cardColection = document.getElementById('card-colection')
-var currentURL = 'https://rickandmortyapi.com/api/character';
+const cardCollection = document.getElementById('card-collection')
+var currentURL = 'https://rickandmortyapi.com/api/character'; // maybe delete
 
 
 // functional for page borders
 let page = 1;
-if(page > 0 && page <= 42) {
-    pageNum.textContent = page + ' стр';
-};
+let maxPages; // Максимальное кол-во страниц
+pageNum.textContent = page + ' стр';
 
 // Functions
-function getData(url) {
+
+function createCards(url) {
     fetch(url)
         .then(response => response.json())
-        .then(data => makeCards(data.results))
+        .then(data => makeCards(data))
 
-        function makeCards(charArray) {
-            charArray.forEach(char => {
-                cardColection.innerHTML +=
+        console.log('Функция создания карточек отработала');
+        function makeCards(obj) {
+            maxPages = obj.info.pages; 
+            obj.results.forEach(char => {
+                cardCollection.innerHTML +=
                     `<div class="card">
                         <img src=${char.image} alt="Avatar" >
                         <div class="container">
@@ -36,50 +38,45 @@ function getData(url) {
                         <p>Specie: ${char.species}</p>
                         </div>
                     </div>`
-
+        
             });
         }
 }
-
 function next() {
-    if(page < 42) {
-        cardColection.innerHTML = ''
+    if(page < maxPages) {
+        cardCollection.innerHTML = ''
         page++;
         currentURL = charactersURL + `?page=${page}&name=${searchSpace.value}`
-        getData(currentURL);
+        createCards(currentURL);
         pageNum.textContent = page + ' стр';
     }
 }
 function prev() {
     if(page > 1) {
-        cardColection.innerHTML = '';
+        cardCollection.innerHTML = '';
         page--;
         currentURL = charactersURL + `?page=${page}&name=${searchSpace.value}`
-        getData(currentURL);
+        createCards(currentURL);
         pageNum.textContent = page + ' стр';
     }
 }
-
-
 function searching() {
     fetch(`https://rickandmortyapi.com/api/character/?name=${searchSpace.value}`)
         .then(response => response.json())
-        .then(data => filterChar(data.results))
+        .then(data => makeCards(data))
 
-        cardColection.innerHTML = '';
-        pageNum.textContent = 1 + ' стр';
+        cardCollection.innerHTML = '';
         page = 1;
+        pageNum.textContent = page + ' стр';
 
         nextPage.addEventListener('click', next);
-        
         prevPage.addEventListener('click', prev);
 
         // search function realise:
-        function filterChar(chars) {
-            for(let char of chars) {
-                let charName = char.name.toLowerCase();
-                if(charName.includes(searchSpace.value.toLowerCase())) {
-                    cardColection.innerHTML +=
+        function makeCards(obj) {
+            maxPages = obj.info.pages; // Устанавливаем максимальное число страниц
+            obj.results.forEach(char => {
+                cardCollection.innerHTML +=
                     `<div class="card">
                         <img src=${char.image} alt="Avatar" >
                         <div class="container">
@@ -89,13 +86,13 @@ function searching() {
                         <p>Specie: ${char.species}</p>
                         </div>
                     </div>`
-                }
-            }
-        }
+        
+            });
+        } 
 }
 // Main
 
-getData(charactersURL);
+createCards(charactersURL); // наполняем сайт карточками при загрузке
 
 // Search
 
